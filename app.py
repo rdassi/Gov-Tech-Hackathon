@@ -2,22 +2,22 @@
 import sys
 import json
 # from shapely.geometry import shape, Point 
-from flask_cors import CORS
+# from flask_cors import CORS
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
 import os
 import predict as p
-from http.server import BaseHTTPRequestHandler, HTTPServer
-PORT_NUMBER = int(os.environ.get('PORT', 8084))
+# from http.server import BaseHTTPRequestHandler, HTTPServer
+# PORT_NUMBER = int(os.environ.get('PORT', 8084))
 
 # Load the model
-model= p.loadModel()
+
 
 app = Flask(__name__, static_url_path='/static')
-
+model= p.loadModel()
 #to resolve CORS error
-CORS(app)
+# CORS(app)
 
 # @app.route("/index")
 # def helloWorld():
@@ -26,9 +26,9 @@ CORS(app)
 
 
 
-model = pickle.load(open('model.pkl','rb'))
+# model = pickle.load(open('model.pkl','rb'))
 
-@app.route('/index')
+@app.route('/index',methods=['POST','GET'])
 def predict():
     # # Get the data from the POST request.
     # data = request.get_json(force=True)
@@ -39,7 +39,7 @@ def predict():
 
 if __name__ == "__main__":
     #run the app, set debug=True during testing
-    app.run(debug=True)
+    app.run(debug=True,)
 
 
 # # HTTPRequestHandler class
