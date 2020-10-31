@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous">
+
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>Farmer's App</title>
+</head>
+
+<body>
+    
+    <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="https://icar.org.in/node/4059">Helpline</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <section id="header" class="jumbotron text-center">
+        <h1 class="display-3">Location</h1>
+
+        <button onclick="getLocation()">Click Here</button>
+        <button onclick="rev_geocode();">rev_geocode</button>
+    <p id="demo"></p>
+
+    <script>
+        function jsonp(url, callback) {
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    const script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
+    window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.body.removeChild( script );
+    callback(data);
+    };
+    }
+        function rev_geocode(){
+            token="fzzfsz7dejrhf5p41iuxd3rv95uoz1ve"
+        jsonp('http://apis.mapmyindia.com/advancedmaps/v1/'+token+'/rev_geocode?lat=26.5645&lng=85.9914',
+        function(data) {
+        console.log(data);
+        alert(JSON.stringify(data));
+        });
+        }
+    </script>
+<!-- Diplay the Latitude, Longitude, Village, District, State -->
+<p id="Latitude">Latitude: </p>
+<p id="Longitude">Longitude: </p>
+<p id="Village">Village: </p>
+<p id="District">District: </p>
+<p id="State">State: </p>
+<!-- <script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+    // Saving lat and long in variables
+    lat= position.coords.latitude
+    long= position.coords.longitude
+
+     x.innerHTML = "Latitude: " + position.coords.latitude + 
+     "<br>Longitude: " + position.coords.longitude;
+    url="https://apis.mapmyindia.com/advancedmaps/v1/fzzfsz7dejrhf5p41iuxd3rv95uoz1ve/rev_geocode?lat="+lat+"&"+"lng="+long
+    window.open(url)
+}
+</script> -->
+ 
+<!-- For sample output -->
+<p class="test-output">{{prediction}}</p>
+
+ </section>
+   
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col" colspan="3">Existing crops</th>
+                <th scope="col" colspan="3">Alternate crops</th>
+                <!-- <th scope="col">Handle</th> -->
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"></th>
+                <td>Kharif</td>
+                <td>Rabi</td>
+                <td>Summer</td>
+                <td>Kharif</td>
+                <td>Rabi</td>
+                <td>Summer</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Name of the crop</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Area allocation (acre)</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Economic Yield</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            <!-- <tr>
+                <th scope="row">Straw yield</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr> -->
+
+            <tr>
+                <th scope="row">Cost of cultivation</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Net returns</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            <!-- <tr>
+                <th scope="row">B:C ratio</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr> -->
+
+            <!-- <tr>
+                <th scope="row">Source of availability of inputs</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr> -->
+
+            <tr>
+                <th scope="row">Marketing source with price</th>
+                <td>val1.1</td>
+                <td>val1.2</td>
+                <td>val1.3</td>
+                <td>val2.1</td>
+                <td>val2.2</td>
+                <td>val2.3</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+   
+    <!-- Loading JS file -->
+    <script type = "text/javascript" src="app.js"></script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- JS for Mapmyindia reverse geocode API -->
+    <!-- <script src="https://apis.mapmyindia.com/advancedmaps/v1/<js_lic_key>/map_load?v=1.2"></script> -->
+
+</body>
+
+</html>
