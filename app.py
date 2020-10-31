@@ -2,7 +2,7 @@
 import sys
 import json
 # from shapely.geometry import shape, Point 
-# from flask_cors import CORS
+from flask_cors import CORS
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
@@ -17,7 +17,7 @@ import predict as p
 app = Flask(__name__, static_url_path='/static')
 model= p.loadModel()
 #to resolve CORS error
-# CORS(app)
+CORS(app)
 
 # @app.route("/index")
 # def helloWorld():
