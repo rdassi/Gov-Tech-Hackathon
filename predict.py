@@ -93,3 +93,16 @@ def loadModel(filename):
             model = pickle.load(f)
     return model
     
+def fert_pred(name):
+
+    root_path='FertilizerData.csv'
+    df=pd.read_csv(root_path)
+    
+    x=df.loc[df['Crop'] == name.lower()]
+    z1=x['N'].values
+    # print(z[0],"haha")
+    z2=x['P'].values
+    z3=x['K'].values
+    z4=x['pH'].values
+    z5=x['soil_moisture'].values
+    return z1[0],z2[0],z3[0],z4[0],z5[0]
