@@ -34,10 +34,12 @@ def predict():
     # # Get the data from the POST request.
     # data = request.get_json(force=True)
     # Make prediction using model loaded from disk as per the data.
-    predictiony = p.prediction_yield(model_yield)
     crop=p.prediction_crop(model_rf)
+    cropnow=crop[0][0].upper()+crop[0][1:]
+    predictiony = p.prediction_yield(model_yield,crop=cropnow)
+    
     # Take the first value of prediction
-    return render_template("index.html", prediction= predictiony,crop=crop)
+    return render_template("index.html", prediction= predictiony[0],crop=cropnow)
 
 if __name__ == "__main__":
     #run the app, set debug=True during testing

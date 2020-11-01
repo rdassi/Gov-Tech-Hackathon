@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 # add meaning of default values
 def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
+    print(crop)
     data=pd.read_csv('apy.csv')
     data=data.drop(['Crop_Year'],axis=1)
     categorical_columns=['State_Name','District_Name','Season','Crop']
