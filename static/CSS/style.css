@@ -1,5 +1,6 @@
+
 #header {
-    background: url("../images/x.jpg");
+    background: url("x.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -18,9 +19,34 @@ button{
 }
 
 .table{
-    color:black;
     
-    font-family: 'Lucida Sans';
-    background-color: blanchedalmond;
+width: 100%;
+background-color: #fff;
+border: 2px thick;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+border-collapse: collapse;
+width: 100%;
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: left;
+
+}
+
+.table-bordered tr:hover{
+background-color:rgba(200,300,250,0.5);
+}
+
+input[type=text] {
+width: 30%;
+padding: 12px 20px;
+margin: 8px 0;
+box-sizing: border-box;
+}
+
+input[type=submit] {
+
+color: cornsilk;
+background-color: black;
+}
    
-           }
+         
