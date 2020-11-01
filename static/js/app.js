@@ -31,7 +31,7 @@ function showPosition(position) {
             },
             //Processing JSON file once the request is successful
             success: function (result) {
-                var jsondata = JSON.parse(result);
+                var jsondata = result;
                 if (jsondata.responseCode == 200) {
 
                     console.log(jsondata)
