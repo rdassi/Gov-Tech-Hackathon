@@ -43,10 +43,22 @@
     </nav>
     
     <section id="header" class="jumbotron text-center">
-        <h1 class="display-3">Location</h1>
+        <h1 class="display-3">Farmer's App</h1>
 
         <button onclick="getLocation()">Click Here</button>
+        
+        
+        <form action="/action_page.php">
+            <label for="fname"></label>
+            <input type="text" id="fname" name="fname" placeholder="Crop"><br><br>
+            <label for="lname"></label>
+            <input type="text" id="lname" name="lname" placeholder="Area"><br><br>
+            <input type="submit" value="Submit">
+           
+          </form>
+        
             <p id="demo"></p>
+        
 
     <script>
         function jsonp(url, callback) {
