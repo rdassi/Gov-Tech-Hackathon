@@ -67,13 +67,14 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
     
     
     scaler=pickle.load(open('scalergb.sav','rb'))
-    x=np.array([statecode,districtcode,seasoncode,cropcode,1254.0])
+    x=np.array([statecode,districtcode,seasoncode,cropcode,area])
     newx=scaler.transform(x.reshape(1,-1))
 
     return math.exp(model.predict(newx))
 
-def prediction_crop(model,temperature=25.567483, humidity=60.492446, rainfall=190.225784):
-    response = requests.get("http://api.weatherapi.com/v1/forecast.json?key=6e1498be712f43a081f200018203110&q=Bangalore&days=10",)
+def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
+    print(district)
+    response = requests.get("http://api.weatherapi.com/v1/forecast.json?key=6e1498be712f43a081f200018203110&q="+district+"&days=10",)
     print(response.status_code)
 
     x=response.json()
@@ -96,29 +97,32 @@ def prediction_crop(model,temperature=25.567483, humidity=60.492446, rainfall=19
       sum=sum + f[i]['day']['avghumidity']
     humidity=sum/3
 
-    x=np.array([temperature, humidity, rainfall])
+    x=np.array([temperature, humidity, 120])
+    print(x)
     scalerrf=pickle.load(open('scalerrf.sav','rb'))
     newx=scalerrf.transform(x.reshape(1,-1))
-    return model.predict(newx)
+    x2=np.array([temperature, humidity])
+    d=pickle.load(open('dict.pkl','rb'))
+    return model.predict(newx), d[model2.predict(x2.reshape(1,-1))[0]]
 
 def loadModel(filename):
     with open(filename, 'rb') as f:
             model = pickle.load(f)
     return model
     
-def fert_pred(name):
-
-    root_path='FertilizerData.csv'
-    df=pd.read_csv(root_path)
+# def fert_pred(name,model):
     
-    x=df.loc[df['Crop'] == name.lower()]
-    z1=x['N'].values
-    # print(z[0],"haha")
-    z2=x['P'].values
-    z3=x['K'].values
-    z4=x['pH'].values
-    z5=x['soil_moisture'].values
-    return z1[0],z2[0],z3[0],z4[0],z5[0]
+#     # root_path='FertilizerData.csv'
+#     # df=pd.read_csv(root_path)
+    
+#     # x=df.loc[df['Crop'] == name.lower()]
+#     # z1=x['N'].values
+#     # # print(z[0],"haha")
+#     # z2=x['P'].values
+#     # z3=x['K'].values
+#     # z4=x['pH'].values
+#     # z5=x['soil_moisture'].values
+#     return z1[0],z2[0],z3[0],z4[0],z5[0]
 
 
 # def optimise(crop,district='NICOBARS',area=1254):

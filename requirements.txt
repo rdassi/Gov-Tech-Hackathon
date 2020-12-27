@@ -4,7 +4,11 @@ certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
 decorator==4.4.2
+dnspython==2.0.0
 Flask==1.1.2
+Flask-Cors==3.0.9
+future==0.18.2
+geocoder==1.38.1
 h5py==3.1.0
 idna==2.10
 ipykernel==5.4.2
@@ -26,10 +30,13 @@ pickleshare==0.7.5
 prompt-toolkit==3.0.8
 ptyprocess==0.6.0
 Pygments==2.7.3
+pymongo==3.11.2
 python-dateutil==2.8.1
+python-decouple==3.3
 pytz==2020.5
 PyYAML==5.3.1
 pyzmq==20.0.0
+ratelim==0.1.6
 requests==2.25.1
 scikit-learn==0.24.0
 scipy==1.5.4
