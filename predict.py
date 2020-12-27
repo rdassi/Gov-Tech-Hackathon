@@ -12,8 +12,8 @@ import pickle
 # add meaning of default values
 def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
     print(crop)
-    data=pd.read_csv('apy.csv')
-    data=data.drop(['Crop_Year'],axis=1)
+    data=pd.read_csv('indiaselected.csv')
+    # data=data.drop(['Crop_Year'],axis=1)
     # categorical_columns=['State_Name','District_Name','Season','Crop']
     data1=pd.DataFrame()
     data1['State_Name']=data['State_Name'].astype('category').cat.codes
@@ -50,19 +50,19 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
         y=d_season[x]
         if(y==season):
             seasoncode=x
-    flag=0
+    # flag=0
     for x in d_crop:
         y=d_crop[x]
         if(y==crop):
             cropcode=x
-            flag=1
+            # flag=1
 
-    if(flag==0):
-        crop='Arecanut'
-        for x in d_crop:
-            y=d_crop[x]
-            if(y==crop):
-                cropcode=x
+    # if(flag==0):
+    #     crop='Arecanut'
+    #     for x in d_crop:
+    #         y=d_crop[x]
+    #         if(y==crop):
+    #             cropcode=x
 
     
     
