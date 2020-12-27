@@ -34,7 +34,7 @@ function showPosition(position) {
                 var jsondata = result;
                 if (jsondata.responseCode == 200) {
 
-                    console.log(jsondata)
+                    // console.log(jsondata)
 
                         // sending values to the HTML doc 
                         var lat = jsondata.results[0].lat;
@@ -47,6 +47,19 @@ function showPosition(position) {
                         $("#District").append(district);
                         var state = jsondata.results[0].state;
                         $("#State").append(state);
+
+                        $.ajax({
+                            url: '/index',
+                            data:{
+                            district: $('#district').val(),
+                            state: $('#state').val()
+                            },
+                            dataType: 'JSON',
+                            type: 'POST',
+                            success: function(data){
+                                // $("#result").html(data.result);
+                            }
+                            });
                         
                 }
                 /*handle the error codes and put the responses in divs. more error codes can be viewed in the documentation*/

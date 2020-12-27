@@ -1,3 +1,7 @@
+body{
+    color: white;
+    font-weight: 700;
+}
 
 #header {
     background: url("x.jpg");
@@ -49,4 +53,4 @@ color: cornsilk;
 background-color: black;
 }
    
-         
+

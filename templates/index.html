@@ -46,21 +46,28 @@
         <h1 class="display-3">Farmer's App</h1>
 
         <button onclick="getLocation()">Click Here</button>
+        <!-- <br>
+            <p id="Latitude" class="imgText">Latitude: </p>
+            <p id="Longitude" class="imgText">Longitude: </p>
+            <p id="Village" class="imgText">Village: </p>
+            <p id="District" class="imgText">District: </p>
+            <p id="State" class="imgText">State: </p>
+        </br> -->
+
         
-        
-        <form action="/action_page.php">
+        <!-- <form action="/action_page.php">
             <label for="fname"></label>
             <input type="text" id="fname" name="fname" placeholder="Crop"><br><br>
             <label for="lname"></label>
             <input type="text" id="lname" name="lname" placeholder="Area"><br><br>
             <input type="submit" value="Submit">
            
-          </form>
+          </form> -->
         
             <p id="demo"></p>
         
 
-    <script>
+    <!-- <script>
         function jsonp(url, callback) {
     const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
     const script = document.createElement('script');
@@ -80,13 +87,13 @@
         alert(JSON.stringify(data));
         });
         }
-    </script>
+    </script> -->
 <!-- Diplay the Latitude, Longitude, Village, District, State -->
-<p id="Latitude">Latitude: </p>
-<p id="Longitude">Longitude: </p>
-<p id="Village">Village: </p>
+<!-- <p id="Latitude">Latitude: </p>
+<p id="Longitude">Longitude: </p> -->
+<!-- <p id="Village">Village: </p>
 <p id="District">District: </p>
-<p id="State">State: </p>
+<p id="State">State: </p> -->
 <!-- <script>
 var x = document.getElementById("demo");
 
@@ -111,7 +118,7 @@ function showPosition(position) {
 </script> -->
  
 <!-- For sample output -->
-<p class="test-output">{{prediction}}</p>
+<!-- <p class="test-output">{{prediction}}</p> -->
 
  </section>
    
@@ -120,13 +127,13 @@ function showPosition(position) {
             <thead>
             <tr>
                 <th scope="col">Parameter</th>
-                <th scope="col" colspan="3">Existing crops</th>
-                <th scope="col" colspan="3">Alternate crops</th>
+                <th scope="col" colspan="3"> Crop Recommendation</th>
+                <!-- <th scope="col" colspan="3">Alternate crops</th> -->
                 <!-- <th scope="col">Handle</th> -->
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <!-- <tr>
                 <th scope="row"></th>
                 <td>Kharif</td>
                 <td>Rabi</td>
@@ -134,36 +141,36 @@ function showPosition(position) {
                 <td>Kharif</td>
                 <td>Rabi</td>
                 <td>Summer</td>
-            </tr>
+            </tr> -->
 
             <tr>
                 <th scope="row">Name of the crop</th>
                 <td>{{crop}}</td>
-                <td>val1.2</td>
+                <!-- <td>val1.2</td>
                 <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <tr>
                 <th scope="row">K</th>
                 <td>{{K}}</td>
-                <td>val1.2</td>
-                <td>val1.3</td>
+                <!-- <td>val1.2</td> -->
+                <!-- <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <tr>
                 <th scope="row">Economic Yield</th>
                 <td>{{prediction}}</td>
-                <td>val1.2</td>
-                <td>val1.3</td>
+                <!-- <td>val1.2</td> -->
+                <!-- <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <!-- <tr>
@@ -179,21 +186,21 @@ function showPosition(position) {
             <tr>
                 <th scope="row">P</th>
                 <td>{{P}}</td>
-                <td>val1.2</td>
+                <!-- <td>val1.2</td>
                 <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <tr>
                 <th scope="row">N</th>
                 <td>{{N}}</td>
-                <td>val1.2</td>
+                <!-- <td>val1.2</td>
                 <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <!-- <tr>
@@ -219,21 +226,21 @@ function showPosition(position) {
             <tr>
                 <th scope="row">pH</th>
                 <td>{{pH}}</td>
-                <td>val1.2</td>
+                <!-- <td>val1.2</td>
                 <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             <tr>
                 <th scope="row">soil_moisture</th>
                 <td>{{soil_moisture}}</td>
-                <td>val1.2</td>
+                <!-- <td>val1.2</td>
                 <td>val1.3</td>
                 <td>val2.1</td>
                 <td>val2.2</td>
-                <td>val2.3</td>
+                <td>val2.3</td> -->
             </tr>
 
             </tbody>
