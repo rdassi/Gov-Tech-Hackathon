@@ -13,9 +13,11 @@ import requests
 import geocoder
 import pymongo
 import csv
-import json 
 from pymongo import MongoClient 
 import pandas as pd
+import time
+
+
 cluster=MongoClient(config('db_url'))
 db=cluster["FertilizerData"]
 collection=db["FertilizerQueryData"]
@@ -58,12 +60,30 @@ def location():
         k=finds['Potassium']
         cropnow=crop[0][0].upper()+crop[0][1:]
         # print(cropnow)
-        predictiony = p.prediction_yield(model_yield,area=area,crop=cropnow,state=state,district=district.upper())
+        month=time.strftime("%m") 
+        print(month)
+        seasons={'Kharif     ': ['7', '8', '9', '10'],
+                'Autumn     ': ['9', '10', '11'],
+                'Summer     ': ['3', '4', '5', '6'],
+                'Winter     ': ['12','1','2'],
+                'Rabi       ': ['10','11','12','1','2','3'],
+                'Whole Year ': ['1','2','3', '4', '5', '6','7', '8', '9', '10','11','12']}
+        s=[]
+        for key,value in seasons.items():
+            # print(value)
+            for val in value:
+                if(val==month):
+                    s.append(key)
+                    break
+        print(s)
+        predictions=[]
+        for season in s:
+            print(season)
+            predictions.append(p.prediction_yield(model_yield,area=area,season=season,crop=cropnow,state=state,district=district.upper()))
         
-        # N,P,K,pH,soil_moisture=p.fert_pred(cropnow,model_fert)
-        # p.optimise(cropnow)
-        # Take the first value of prediction
-        return render_template("index.html", prediction= predictiony,crop=cropnow,fertiliser=fert,N=n,P=pf,K=k)
+        print(predictions)
+        
+        return render_template("index.html", prediction= sum(predictions)/len(predictions),crop=cropnow,fertiliser=fert,N=n,P=pf,K=k)
     else:
 
         return render_template("index.html")

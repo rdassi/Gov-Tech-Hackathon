@@ -13,14 +13,12 @@ import pickle
 def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
     print(crop)
     data=pd.read_csv('data/indiaselected.csv')
-    # data=data.drop(['Crop_Year'],axis=1)
-    # categorical_columns=['State_Name','District_Name','Season','Crop']
+    
     data1=pd.DataFrame()
     data1['State_Name']=data['State_Name'].astype('category').cat.codes
     data1['District_Name']=data['District_Name'].astype('category').cat.codes
     data1['Season']=data['Season'].astype('category').cat.codes
     data1['Crop']=data['Crop'].astype('category').cat.codes
-# data['Crop_Year']=data['Crop_Year'].astype('category')
 
     data1['Area']=data['Area']
     data1['Production']=data['Production']
@@ -28,12 +26,8 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
     d_district = dict(enumerate(data['District_Name'].astype('category').cat.categories))
     d_season = dict(enumerate(data['Season'].astype('category').cat.categories))
     d_crop = dict(enumerate(data['Crop'].astype('category').cat.categories))
-    # scaler = StandardScaler()
-    # result=data1.to_numpy()
-    # X=[]
-    # for ele in result:
-    #     X.append(ele[:-1])
-
+    
+    print(d_season)
 
     for x in d_state:
 
@@ -50,20 +44,14 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
         y=d_season[x]
         if(y==season):
             seasoncode=x
-    # flag=0
+    
     for x in d_crop:
         y=d_crop[x]
         if(y==crop):
             cropcode=x
-            # flag=1
+            
 
-    # if(flag==0):
-    #     crop='Arecanut'
-    #     for x in d_crop:
-    #         y=d_crop[x]
-    #         if(y==crop):
-    #             cropcode=x
-
+    
     
     
     scaler=pickle.load(open('PickledFiles/scalergb.sav','rb'))
@@ -74,8 +62,9 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
 
 def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
     print(district)
+    
     response = requests.get("http://api.weatherapi.com/v1/forecast.json?key=6e1498be712f43a081f200018203110&q="+district+"&days=10",)
-    print(response.status_code)
+    # print(response.status_code)
 
     x=response.json()
     y=pd.DataFrame.from_records(x)
@@ -97,7 +86,7 @@ def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rain
       sum=sum + f[i]['day']['avghumidity']
     humidity=sum/3
 
-    x=np.array([temperature, humidity, rainfall])
+    x=np.array([temperature, humidity, rainfall+5])
     print(x)
     scalerrf=pickle.load(open('PickledFiles/scalerrf.sav','rb'))
     newx=scalerrf.transform(x.reshape(1,-1))
@@ -110,40 +99,7 @@ def loadModel(filename):
             model = pickle.load(f)
     return model
     
-# def fert_pred(name,model):
-    
-#     # root_path='FertilizerData.csv'
-#     # df=pd.read_csv(root_path)
-    
-#     # x=df.loc[df['Crop'] == name.lower()]
-#     # z1=x['N'].values
-#     # # print(z[0],"haha")
-#     # z2=x['P'].values
-#     # z3=x['K'].values
-#     # z4=x['pH'].values
-#     # z5=x['soil_moisture'].values
-#     return z1[0],z2[0],z3[0],z4[0],z5[0]
 
-
-# def optimise(crop,district='NICOBARS',area=1254):
-#     commoncrops=['Rice', 'Maize', 'Blackgram', 'Lentil', 'Banana', 'Mango',
-#        'Grapes', 'Apple', 'Orange', 'Papaya', 'Jute', 'Coffee']
-
-#     yieldfile=pd.read_csv('apy.csv')
-#     fertilisers=pd.read_csv('FertilizerData.csv')
-#     districtcrops=yieldfile[yieldfile['District_Name']==district].reset_index(drop=True)
-#     cropsbyarea=districtcrops[districtcrops['Area']<=area].reset_index(drop=True)
-#     k=0
-#     for crops in cropsbyarea['Crop']:
-#         # cropsbyarea[k]['Production']
-#         row=fertilisers[fertilisers['Crop']==crops.lower()]
-#         n=row['N']
-#         p=row['P']
-#         k=row['K']
-#         total=n+p+k
-#         print(total,n,p,k,row)
-#         k+=1
-#         break
 
 
 
