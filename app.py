@@ -25,6 +25,7 @@ db=cluster["FertilizerData"]
 
 #getting the subset that corresponds to querying 
 collection=db["FertilizerQueryData"]
+collection2=db["IndiaSelect"]
 
 # Load the models
 model_yield= p.loadModel('PickledFiles/modelgb.pkl')
@@ -41,10 +42,11 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # for the / route, render index.html template under two conditions
 @app.route('/',methods=['POST','GET'])
 def location():
-
+    
     #if the submit button has been clicked
     if(request.method=='POST'):
-
+        df = pd.DataFrame(list(collection2.find()))
+        # print(df)
         #get the latitude and logitude corresponding to the user's IP address
         g = geocoder.ip('me')
         print(g.latlng)
@@ -85,15 +87,15 @@ def location():
 
         #get current month
         month=time.strftime("%m") 
-        print(month)
+        # print(month)
 
         #dictionary that maps seasons to months
         seasons={'Kharif     ': ['7', '8', '9', '10'],
                 'Autumn     ': ['9', '10', '11'],
                 'Summer     ': ['3', '4', '5', '6'],
                 'Winter     ': ['12','1','2'],
-                'Rabi       ': ['10','11','12','1','2','3'],
-                'Whole Year ': ['1','2','3', '4', '5', '6','7', '8', '9', '10','11','12']}
+                'Rabi       ': ['10','11','12','1','2','3']}
+                # 'Whole Year ': ['1','2','3', '4', '5', '6','7', '8', '9', '10','11','12']}
 
         #pick all seasons for the current month
         s=[]
@@ -103,12 +105,14 @@ def location():
                 if(val==month):
                     s.append(key)
                     break
-        print(s)
+
+        s.append('Whole Year ')
+        # print(s)
         #store the yield prediction for each season in a list
         predictions=[]
         for season in s:
-            print(season)
-            predictions.append(p.prediction_yield(model_yield,area=area,season=season,crop=cropnow,state=state,district=district.upper()))
+            # print(season)
+            predictions.append(p.prediction_yield(model_yield,df,area=area,season=season,crop=cropnow,state=state,district=district.upper()))
         
         print(predictions)
         

@@ -1,8 +1,7 @@
 env/
 __pycache__/
 .env
-govtechdata.py
-query.py
+
 
 *.py[cod]
 *$py.class

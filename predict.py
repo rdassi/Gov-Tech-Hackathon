@@ -8,10 +8,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import GradientBoostingRegressor
 import pickle
 
+
+
 # predicting yield from crop, season, mapmyindia api data and user input
-def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
+def prediction_yield(model,data,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
     print(crop)
-    data=pd.read_csv('data/indiaselected.csv')
+    # data=pd.read_csv('data/indiaselected.csv')
     
 
     #creating categorical labels or codes for all the values and storing it as a separate dataframe
