@@ -6,3 +6,5 @@ query.py
 
 *.py[cod]
 *$py.class
+.slugignore
+Procfile
