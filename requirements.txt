@@ -9,6 +9,7 @@ Flask==1.1.2
 Flask-Cors==3.0.9
 future==0.18.2
 geocoder==1.38.1
+gunicorn==20.0.4
 h5py==3.1.0
 idna==2.10
 ipykernel==5.4.2

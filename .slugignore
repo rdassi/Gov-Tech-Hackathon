@@ -1,0 +1,14 @@
+env/
+__pycache__/
+.env
+govtechdata.py
+query.py
+notebooks/
+data/apy.csv
+data/FertlizerPrediction.csv
+data/MergeFileCrop.csv
+
+
+*.py[cod]
+*$py.class
+

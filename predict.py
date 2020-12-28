@@ -12,7 +12,7 @@ import pickle
 # add meaning of default values
 def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
     print(crop)
-    data=pd.read_csv('indiaselected.csv')
+    data=pd.read_csv('data/indiaselected.csv')
     # data=data.drop(['Crop_Year'],axis=1)
     # categorical_columns=['State_Name','District_Name','Season','Crop']
     data1=pd.DataFrame()
@@ -66,7 +66,7 @@ def prediction_yield(model,area=1254, district='NICOBARS',crop='Arecanut', seaso
 
     
     
-    scaler=pickle.load(open('scalergb.sav','rb'))
+    scaler=pickle.load(open('PickledFiles/scalergb.sav','rb'))
     x=np.array([statecode,districtcode,seasoncode,cropcode,area])
     newx=scaler.transform(x.reshape(1,-1))
 
@@ -97,12 +97,12 @@ def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rain
       sum=sum + f[i]['day']['avghumidity']
     humidity=sum/3
 
-    x=np.array([temperature, humidity, 120])
+    x=np.array([temperature, humidity, rainfall])
     print(x)
-    scalerrf=pickle.load(open('scalerrf.sav','rb'))
+    scalerrf=pickle.load(open('PickledFiles/scalerrf.sav','rb'))
     newx=scalerrf.transform(x.reshape(1,-1))
     x2=np.array([temperature, humidity])
-    d=pickle.load(open('dict.pkl','rb'))
+    d=pickle.load(open('PickledFiles/dict.pkl','rb'))
     return model.predict(newx), d[model2.predict(x2.reshape(1,-1))[0]]
 
 def loadModel(filename):

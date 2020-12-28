@@ -20,16 +20,16 @@ cluster=MongoClient(config('db_url'))
 db=cluster["FertilizerData"]
 collection=db["FertilizerQueryData"]
 # Load the model
-model_yield= p.loadModel('modelgb.pkl')
-model_rf=p.loadModel('modelrf.pkl')
-model_fert=p.loadModel('modelfert.pkl')
+model_yield= p.loadModel('PickledFiles/modelgb.pkl')
+model_rf=p.loadModel('PickledFiles/modelrf.pkl')
+model_fert=p.loadModel('PickledFiles/modelfert.pkl')
 app = Flask(__name__, static_url_path='/static')
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 #to resolve CORS error
 # CORS(app)
 
 
-@app.route('/index',methods=['POST','GET'])
+@app.route('/',methods=['POST','GET'])
 def location():
     if(request.method=='POST'):
         g = geocoder.ip('me')
@@ -72,6 +72,6 @@ def location():
 
 if __name__ == "__main__":
     #run the app, set debug=True during testing
-    app.run(debug=True)
+    app.run(debug=False)
 
 
