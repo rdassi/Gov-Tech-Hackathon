@@ -17,28 +17,42 @@ from pymongo import MongoClient
 import pandas as pd
 import time
 
-
+#getting the cluster from the database url
 cluster=MongoClient(config('db_url'))
+
+#accessing the fertliser data
 db=cluster["FertilizerData"]
+
+#getting the subset that corresponds to querying 
 collection=db["FertilizerQueryData"]
-# Load the model
+
+# Load the models
 model_yield= p.loadModel('PickledFiles/modelgb.pkl')
 model_rf=p.loadModel('PickledFiles/modelrf.pkl')
 model_fert=p.loadModel('PickledFiles/modelfert.pkl')
+
+#app instance
 app = Flask(__name__, static_url_path='/static')
+
+#allows cross origin requests for location
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-#to resolve CORS error
-# CORS(app)
 
 
+# for the / route, render index.html template under two conditions
 @app.route('/',methods=['POST','GET'])
 def location():
+
+    #if the submit button has been clicked
     if(request.method=='POST'):
+
+        #get the latitude and logitude corresponding to the user's IP address
         g = geocoder.ip('me')
         print(g.latlng)
+
         lat=g.latlng[0]
-        print(100)
         longg=g.latlng[1]
+
+        #send the latitiude and longitude to the mapmyindia api to get the district, state names
         url = 'http://apis.mapmyindia.com/advancedmaps/v1/'+config('license_key')+'/rev_geocode?lat='+str(lat)+'&lng='+str(longg)
         r = requests.get(url = url) 
         # extracting data in json format 
@@ -50,24 +64,38 @@ def location():
         print(district)
         state=data['results'][0]['state']
         print(state)
+
+        #getting area from the form 
         area=float(request.form['area'])
-        print(50)
+    
+        #predicting the crop using the district as input to weather api, which further gives weather input features to model,
+        #and also using weather data to predict fertiliser
         crop,fert=p.prediction_crop(model=model_rf,model2=model_fert,district=district)
+
+        #use the predicted fertiliser to query npk values
         result= {"Fertilizer Name": fert}
         finds=collection.find_one(result)
         n=finds['Nitrogen']
         pf=finds['Phosphorous']
         k=finds['Potassium']
+
+        #convert the crop to proper case for the yield prediction model
         cropnow=crop[0][0].upper()+crop[0][1:]
         # print(cropnow)
+
+        #get current month
         month=time.strftime("%m") 
         print(month)
+
+        #dictionary that maps seasons to months
         seasons={'Kharif     ': ['7', '8', '9', '10'],
                 'Autumn     ': ['9', '10', '11'],
                 'Summer     ': ['3', '4', '5', '6'],
                 'Winter     ': ['12','1','2'],
                 'Rabi       ': ['10','11','12','1','2','3'],
                 'Whole Year ': ['1','2','3', '4', '5', '6','7', '8', '9', '10','11','12']}
+
+        #pick all seasons for the current month
         s=[]
         for key,value in seasons.items():
             # print(value)
@@ -76,6 +104,7 @@ def location():
                     s.append(key)
                     break
         print(s)
+        #store the yield prediction for each season in a list
         predictions=[]
         for season in s:
             print(season)
@@ -83,9 +112,13 @@ def location():
         
         print(predictions)
         
+        #render template with predicted values (average yield, crop, NPK values, fertliser name)
         return render_template("index.html", prediction= sum(predictions)/len(predictions),crop=cropnow,fertiliser=fert,N=n,P=pf,K=k)
+    
+    #loading the website before user has entered values
     else:
 
+        #render template with blank table
         return render_template("index.html")
 
 
