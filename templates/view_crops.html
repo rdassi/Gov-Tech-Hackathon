@@ -37,24 +37,9 @@
             </div>
         </nav>
         
-        <form action="/index">
-            <button>Get Recommendations</button>
-        </form>
-        <form action="/set_values">
-            <button>Update Farm Details</button>
-        </form>
-        <form action="/past_rec">
-            <button>See Past Recommendations</button>
-        </form>
-        <form action="/view_crops">
-            <button>Crops Details</button>
-        </form>
-        <form action="/view_ferts">
-            <button>Fertilizer Details</button>
-        </form>
-        <form action="/logout">
-            <button>Logout</button>
-        </form>
+        {% for crop in crops %}
+            {{crop}}
+        {% endfor %}
         
         
     </body>

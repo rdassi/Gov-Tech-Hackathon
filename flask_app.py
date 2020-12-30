@@ -213,6 +213,32 @@ def setuserparamsfunc():
         
     return render_template("update_values.html")
 
+@app.route('/past_rec',methods =['POST','GET'])
+def past_rec():
+    if not g.user:
+        return redirect(url_for('login'))
+    people = fdb.child("users").get()
+    for person in people.each():
+        print(person.key())
+        if(person.key()==str(g.user.id)):
+            recs=person.val()
+    return render_template("past_rec.html",recs=recs)
+
+@app.route('/view_crops',methods =['POST','GET'])
+def view_crops():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    crops=['fskNFs','afjBJKSDf']
+    return render_template("view_crops.html",crops=crops)
+
+@app.route('/view_ferts',methods =['POST','GET'])
+def view_ferts():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    ferts=['haha','asdhka']
+    return render_template("view_ferts.html",ferts=ferts)
 
 @app.route('/logout')
 def logout():

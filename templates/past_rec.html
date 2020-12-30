@@ -13,7 +13,7 @@
             crossorigin="anonymous">
 
     </head>
-    <h1>Hello {{g.user.name}}</h1>
+    <h1>View Past Recommendations</h1>
     <body>
         <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
             <a class="navbar-brand" href="#"></a>
@@ -37,24 +37,7 @@
             </div>
         </nav>
         
-        <form action="/index">
-            <button>Get Recommendations</button>
-        </form>
-        <form action="/set_values">
-            <button>Update Farm Details</button>
-        </form>
-        <form action="/past_rec">
-            <button>See Past Recommendations</button>
-        </form>
-        <form action="/view_crops">
-            <button>Crops Details</button>
-        </form>
-        <form action="/view_ferts">
-            <button>Fertilizer Details</button>
-        </form>
-        <form action="/logout">
-            <button>Logout</button>
-        </form>
+        <p>{{recs}}</p>
         
         
     </body>
