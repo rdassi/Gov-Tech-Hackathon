@@ -14,7 +14,7 @@
         crossorigin="anonymous">
 
 
-    <title>Farmer's App</title>
+    <title>Farmer's App </title>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{url_for('profile')}}">Profile <span class="sr-only">(current)</span></a>
                 </li>
 
                 <li class="nav-item">
@@ -41,10 +41,10 @@
         </div>
     </nav>
     
-    <section id="header" class="jumbotron text-center">
+    <!-- <section id="header" class="jumbotron text-center">
         <h1 class="display-3">Farmer's App</h1>
         <br><br>
-        <form id="location" method="POST" action="/">
+        <form id="location" method="POST" action="/index">
             <p class="label">Enter Area</p>
             <input type="text" name="area" placeholder="Area" required />
             <br><br>
@@ -70,7 +70,7 @@
 
 
  </section>
-   
+    -->
     <div>
         <table class="table table-bordered">
             <thead>
@@ -93,7 +93,7 @@
 
             <tr>
                 <th scope="row">Economic Yield</th>
-                <td>{{prediction}}</td>
+                <td>{{yields}}</td>
                 
             </tr>
             <tr>

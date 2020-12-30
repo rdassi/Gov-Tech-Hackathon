@@ -8,22 +8,44 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import GradientBoostingRegressor
 import pickle
 
+# function to load pickled ML models
+def loadpickles(filename):
+    with open(filename, 'rb') as f:
+            model = pickle.load(f)
+    return model
 
+def get_code(d,modelparam):
+    for x in d:
+        y=d[x]
+        if(y==modelparam):
+            return x
+    return 1
+
+def get_average(f,choice):
+    sum=0
+    for i in range(3):
+      sum=sum + f[i]['day'][choice]
+    #   print(f[i]['day']['avgtemp_c'])
+    value=sum/3
+    return value
+
+def predict_crop_for_each_day(f,scalerrf,model):
+    crops=[]
+    for i in range(3):
+        temp=f[i]['day']['avgtemp_c']
+        rain=f[i]['day']['totalprecip_mm']
+        hum=f[i]['day']['avghumidity']
+        x1=np.array([temp,hum,(i*100*rain+100)])
+        newx1=scalerrf.transform(x1.reshape(1,-1))
+        crops.append(model.predict(newx1))
+    return crops
 
 # predicting yield from crop, season, mapmyindia api data and user input
-def prediction_yield(model,data,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
-    print(crop)
-    # data=pd.read_csv('data/indiaselected.csv')
+def prediction_yield(model_yield,data,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
     
-
-    #creating categorical labels or codes for all the values and storing it as a separate dataframe
-    data1=pd.DataFrame()
-    data1['State_Name']=data['State_Name'].astype('category').cat.codes
-    data1['District_Name']=data['District_Name'].astype('category').cat.codes
-    data1['Season']=data['Season'].astype('category').cat.codes
-    data1['Crop']=data['Crop'].astype('category').cat.codes
-    data1['Area']=data['Area']
-    data1['Production']=data['Production']
+    print(crop)
+    
+    column_names=['State_Name','District_Name','Season','Crop','Area','Production']
 
     # creating a dictionary of category codes and the value
     d_state = dict(enumerate(data['State_Name'].astype('category').cat.categories))
@@ -31,35 +53,14 @@ def prediction_yield(model,data,area=1254, district='NICOBARS',crop='Arecanut', 
     d_season = dict(enumerate(data['Season'].astype('category').cat.categories))
     d_crop = dict(enumerate(data['Crop'].astype('category').cat.categories))
     
-    # print(d_season)
-
     #finding the corresponding codes for user input
-    for x in d_state:
+    statecode=get_code(d_state,state)
+    districtcode=get_code(d_district,district)
+    seasoncode=get_code(d_season,season)
+    cropcode=get_code(d_crop,crop)
 
-        y=d_state[x]
-        if(y==state):
-            statecode=x
-
-    for x in d_district:
-        y=d_district[x]
-        if(y==district):
-            districtcode=x
-
-    for x in d_season:
-        y=d_season[x]
-        if(y==season):
-            seasoncode=x
-    
-    for x in d_crop:
-        y=d_crop[x]
-        if(y==crop):
-            cropcode=x
-            
-
-    
-    
     #loading the scaler fit on training data
-    scaler=pickle.load(open('PickledFiles/scalergb.sav','rb'))
+    scaler=loadpickles('PickledFiles/scalergb.sav')
 
     #creating a vector of the input features
     x=np.array([statecode,districtcode,seasoncode,cropcode,area])
@@ -68,10 +69,14 @@ def prediction_yield(model,data,area=1254, district='NICOBARS',crop='Arecanut', 
     newx=scaler.transform(x.reshape(1,-1))
 
     #returning prediction
-    return math.exp(model.predict(newx))
+    return math.exp(model_yield.predict(newx))
 
 #crop prediction and fertiliser prediction from weather api data
-def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
+def prediction_crop(model_crop,model_fert,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
+    
+    #loading the scaler fit on the training data
+    scalerrf=loadpickles('PickledFiles/scalerrf.sav')
+    
     print(district)
     
     #sending get request to the weather api
@@ -85,50 +90,38 @@ def prediction_crop(model,model2,temperature=25.567483, humidity=60.492446, rain
     y=pd.DataFrame.from_records(x)
     z=y['forecastday':'name']
     f=z['forecast']['forecastday']
-
+    # print("haha")
 
     #taking the average for three day forecasts
-    sum=0
-    for i in range(3):
-      sum=sum + f[i]['day']['avgtemp_c']
-    temperature=sum/3
-
-    sum=0
-    for i in range(3):
-      sum=sum + f[i]['day']['totalprecip_mm']
-    rainfall=(sum/3)*100
-
-    sum=0
-    for i in range(3):
-      sum=sum + f[i]['day']['avghumidity']
-    humidity=sum/3
-
+    avg_temp=get_average(f,'avgtemp_c')
+    avg_rain=get_average(f,'totalprecip_mm')
+    avg_hum=get_average(f,'avghumidity')
 
     #creating feature vector out of the forecasted averages
-    x=np.array([temperature, humidity, rainfall+5]) #adding a small smoothing parameter for 0 rainfall
-    print(x)
-
-    #loading the scaler fit on the training data
-    scalerrf=pickle.load(open('PickledFiles/scalerrf.sav','rb'))
-
+    x3=np.array([avg_temp, avg_hum, avg_rain+5]) #adding a small smoothing parameter for 0 rainfall
+    # print(x3)
     #scale the input features
-    newx=scalerrf.transform(x.reshape(1,-1))
+    newx=scalerrf.transform(x3.reshape(1,-1))
+
+    avg_crop=model_crop.predict(newx)
+    
+    all_crops=predict_crop_for_each_day(f,scalerrf,model_crop)
+
+    all_crops.append(avg_crop)
+    
 
     #creating a feature vector of temp and himidity for the fertiliser model
     x2=np.array([temperature, humidity])
 
     #loading the dictionary that maps fertliser labels to fertiliser names
-    d=pickle.load(open('PickledFiles/dict.pkl','rb'))
+    d=loadpickles('PickledFiles/dict.pkl')
 
     #return crop prediction and fertiliser prediction
-    return model.predict(newx), d[model2.predict(x2.reshape(1,-1))[0]]
+
+    return np.unique(all_crops), d[model_fert.predict(x2.reshape(1,-1))[0]]
 
 
-# function to load pickled ML models
-def loadModel(filename):
-    with open(filename, 'rb') as f:
-            model = pickle.load(f)
-    return model
+
     
 
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign In</title>
+    </head>
+    <h1> Sign Up</h1>
+    <body>
+        {% if us %}
+            <p>Check credentials</p>
+        {%endif%}
+        <form method="POST">
+            <!-- <div>
+                <label for="authy-countries">Country code:</label>
+                <select name="country_code" id="authy-countries" data-show-as="number"></select>
+            </div> -->
+            <input type="text" name="name" placeholder="enter name" required>
+            <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="10 digit phone number" required>
+            <p class="label">Select Soil</p>
+            <select class="form-control" name="soil">
+                <option>Sandy</option>
+                <option>Loamy</option>
+                <option>Black</option>
+                <option>Red</option>
+                <option>Clayey</option>
+            </select><br><br>
+            <p class="label">Enter Area</p>
+            <input type="text" name="area" placeholder="Area" required />
+            <input type="password" name="password" placeholder="password" required>
+            <input type="submit" name="submit">
+        </form>
+        
+    </body>
+</html>
