@@ -230,42 +230,18 @@ def past_rec():
 def view_crops():
     if not g.user:
         return redirect(url_for('login'))
-    icollection=dbm["Imagecollec"]
     
+    icollection=dbm["Imagecollec"]
     crops_list=ff.crop_fert_details(icollection)
-    # for crop in crops:
-    #     bin_img=crop['ImageID']
-    #     data = io.BytesIO(bin_img)
-    #     image = Image.open(data)
-    #     image.save(data, "JPEG")
-    #     encoded_img_data = base64.b64encode(data.getvalue())
-    #     # print(encoded_img_data)
-    #     img_data=encoded_img_data.decode('ascii')
-        
-    #     crops_list.append({'img_data':img_data,'desc':crop['desc'],'id':crop['id']})
-    # print(crops_list)
-        # final_data={'files':crop_images}
-        # image = Image.open(data)
-    # crops=['fskNFs','afjBJKSDf']
     return render_template("view_crops_ferts.html",crop_fert=crops_list)
 
 @app.route('/view_ferts',methods =['POST','GET'])
 def view_ferts():
     if not g.user:
         return redirect(url_for('login'))
+
     fcollection=dbm["FertilizerDesc"]
     ferts_list=ff.crop_fert_details(fcollection)
-    # for fert in ferts:
-    #     bin_img=fert['ImageID']
-    #     data = io.BytesIO(bin_img)
-    #     image = Image.open(data)
-    #     image.save(data, "JPEG")
-    #     encoded_img_data = base64.b64encode(data.getvalue())
-    #     # print(encoded_img_data)
-    #     img_data=encoded_img_data.decode('ascii')
-        
-    #     ferts_list.append({'img_data':img_data,'desc':fert['desc'],'id':fert['id']})
-    
     return render_template("view_crops_ferts.html",crop_fert=ferts_list)
 
 @app.route('/logout')
