@@ -1,10 +1,10 @@
 import pymongo
 import csv
 import json 
-
+from decouple import config
 from pymongo import MongoClient 
 import pandas as pd
-cluster=MongoClient("mongodb+srv://neelb:Fertilizer123@fertilizer.244tu.mongodb.net/<dbname>?retryWrites=true&w=majority")
+cluster=MongoClient(config("db_url"))
 db=cluster["FertilizerData"]
 collection=db["IndiaSelect"]
 df= pd.read_csv('/Users/neelbhandari/Desktop/GovTech/FertilizerPrediction.csv',encoding="utf-8")

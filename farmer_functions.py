@@ -6,6 +6,11 @@ import pandas as pd
 import time
 import predict as p
 from decouple import config
+import base64
+from PIL import Image
+import io
+from io import BytesIO
+from io import StringIO
 
 def get_state_and_district():
     #get the latitude and logitude corresponding to the user's IP address
@@ -81,3 +86,19 @@ def pred_yield_helper(df,model,crops,area,state,district):
         print(predictions)
         pred.append(sum(predictions)/len(predictions))
     return pred
+
+
+def crop_fert_details(mdbcollection):
+    mdbcursor=mdbcollection.find()
+    items_list=[]
+    for val in mdbcursor:
+        bin_img=val['ImageID']
+        data = io.BytesIO(bin_img)
+        image = Image.open(data)
+        image.save(data, "JPEG")
+        encoded_img_data = base64.b64encode(data.getvalue())
+        # print(encoded_img_data)
+        img_data=encoded_img_data.decode('ascii')
+        
+        items_list.append({'img_data':img_data,'desc':val['desc'],'id':val['id']})
+    return items_list

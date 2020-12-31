@@ -36,9 +36,11 @@
                 </ul>
             </div>
         </nav>
-        
-        {% for fert in ferts %}
-            {{fert}}
+        <!-- {% set count = namespace(value=0) %}         -->
+        {% for val in crop_fert %}
+            <h3>{{val['id']}}</h3>
+            <p>{{val['desc']}}</p>
+            <p><img id="picture" src="data:image/jpeg;base64,{{ val['img_data']|safe }}"alt="img_data"  id="imgslot"></p>
         {% endfor %}
         
         
