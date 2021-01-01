@@ -21,24 +21,40 @@ def get_code(d,modelparam):
             return x
     return 1
 
-def get_average(f,choice):
-    sum=0
-    for i in range(3):
-      sum=sum + f[i]['day'][choice]
-    #   print(f[i]['day']['avgtemp_c'])
-    value=sum/3
-    return value
+# def get_average(f,choice):
+#     sum=0
+#     for i in range(3):
+#       sum=sum + f[i]['day'][choice]
+#     #   print(f[i]['day']['avgtemp_c'])
+#     value=sum/3
+#     return value
 
-def predict_crop_for_each_day(f,scalerrf,model):
+def predict_crop_for_each_day(f,scalerrf,model_crop,model_N,model_P,model_K,model_fert,soil,scalernpk,scalerknn,fert_dic,crop_dic):
     crops=[]
+    crop_ferts=[]
     for i in range(3):
+       
         temp=f[i]['day']['avgtemp_c']
         rain=f[i]['day']['totalprecip_mm']
         hum=f[i]['day']['avghumidity']
-        x1=np.array([temp,hum,(i*100*rain+100)])
-        newx1=scalerrf.transform(x1.reshape(1,-1))
-        crops.append(model.predict(newx1))
-    return crops
+        x_crop=np.array([temp,hum,(i*100*rain+100)])
+        crop=model_crop.predict(scalerrf.transform(x_crop.reshape(1,-1)))
+        print(crop)
+        for key,value in crop_dic.items():
+            
+            if(value==crop):
+                cvalue=key
+        x_npk=np.array([temp,hum,rain,cvalue])
+        x_npk_scaled=scalernpk.transform(x_npk.reshape(1,-1))
+        N=model_N.predict(x_npk_scaled)
+        P=model_P.predict(x_npk_scaled)
+        K=model_K.predict(x_npk_scaled)
+        x_fert=np.array([N[0],K[0],P[0],soil,temp,hum])
+        fert=model_fert.predict(scalerknn.transform(x_fert.reshape(1,-1)))
+        crops.append([crop[0],N[0],P[0],K[0],fert_dic[fert[0]]])
+        crop_ferts.append([crop[0],fert_dic[fert[0]]])
+        # crops.append(crop)
+    return crops,crop_ferts
 
 # predicting yield from crop, season, mapmyindia api data and user input
 def prediction_yield(model_yield,data,area=1254, district='NICOBARS',crop='Arecanut', season='Kharif     ', state='Andaman and Nicobar Islands'):
@@ -72,11 +88,12 @@ def prediction_yield(model_yield,data,area=1254, district='NICOBARS',crop='Areca
     return math.exp(model_yield.predict(newx))
 
 #crop prediction and fertiliser prediction from weather api data
-def prediction_crop(model_crop,model_fert,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
+def prediction_crop(model_crop,model_fert,model_N,model_P,model_K,soil_type,temperature=25.567483, humidity=60.492446, rainfall=190.225784,district='Bangalore'):
     
     #loading the scaler fit on the training data
     scalerrf=loadpickles('PickledFiles/scalerrf.sav')
-    
+    scalernpk=loadpickles('PickledFiles/scalernpk.sav')
+    scalerknn=loadpickles('PickledFiles/scalerknn.sav')
     print(district)
     
     #sending get request to the weather api
@@ -91,34 +108,28 @@ def prediction_crop(model_crop,model_fert,temperature=25.567483, humidity=60.492
     z=y['forecastday':'name']
     f=z['forecast']['forecastday']
     # print("haha")
+    crop_dic=loadpickles('PickledFiles/dictcrop.pkl')
+    soil_dic=loadpickles('PickledFiles/dictsoil.pkl')
+    fert_dic=loadpickles('PickledFiles/dictfert.pkl')
+    for key,value in soil_dic.items():
+        if(value==soil_type):
+            soil=key
+    all_recs,crop_ferts=predict_crop_for_each_day(f,scalerrf,model_crop,model_N,model_P,model_K,model_fert, soil,scalernpk,scalerknn,fert_dic,crop_dic)
+    print(crop_ferts)
+    _,indices=np.unique(crop_ferts,return_index=True,axis=0)
+    print(indices)
+    recs=[]
+    for i in indices:
+        recs.append(all_recs[i])
+    # #creating a feature vector of temp and himidity for the fertiliser model
+    # x2=np.array([temperature, humidity])
 
-    #taking the average for three day forecasts
-    avg_temp=get_average(f,'avgtemp_c')
-    avg_rain=get_average(f,'totalprecip_mm')
-    avg_hum=get_average(f,'avghumidity')
-
-    #creating feature vector out of the forecasted averages
-    x3=np.array([avg_temp, avg_hum, avg_rain+5]) #adding a small smoothing parameter for 0 rainfall
-    # print(x3)
-    #scale the input features
-    newx=scalerrf.transform(x3.reshape(1,-1))
-
-    avg_crop=model_crop.predict(newx)
-    
-    all_crops=predict_crop_for_each_day(f,scalerrf,model_crop)
-
-    all_crops.append(avg_crop)
-    
-
-    #creating a feature vector of temp and himidity for the fertiliser model
-    x2=np.array([temperature, humidity])
-
-    #loading the dictionary that maps fertliser labels to fertiliser names
-    d=loadpickles('PickledFiles/dict.pkl')
+    # #loading the dictionary that maps fertliser labels to fertiliser names
+    # d=loadpickles('PickledFiles/dict.pkl')
 
     #return crop prediction and fertiliser prediction
 
-    return np.unique(all_crops), d[model_fert.predict(x2.reshape(1,-1))[0]]
+    return recs
 
 
 

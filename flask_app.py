@@ -1,7 +1,6 @@
 # Import libraries
 import sys
 import json
-
 from flask import Flask, request, jsonify, render_template, url_for, redirect, make_response, g, session
 from flask_sqlalchemy import SQLAlchemy 
 from  werkzeug.security import generate_password_hash, check_password_hash 
@@ -48,6 +47,9 @@ collection2=dbm["IndiaSelect"]
 model_yield= p.loadpickles('PickledFiles/modelgb.pkl')
 model_rf=p.loadpickles('PickledFiles/modelrf.pkl')
 model_fert=p.loadpickles('PickledFiles/modelfert.pkl')
+model_N=p.loadpickles('PickledFiles/modelngb.pkl')
+model_P=p.loadpickles('PickledFiles/modelpgb.pkl')
+model_K=p.loadpickles('PickledFiles/modelkgb.pkl')
 
 #app instance
 app = Flask(__name__, static_url_path='/static')
@@ -80,7 +82,7 @@ def before_request():
         g.user = user
 
 # for the / route, render index.html template under two conditions
-@app.route('/index',methods=['POST','GET'])
+@app.route('/recommendation',methods=['POST','GET'])
 def location():
     if not g.user:
         return redirect(url_for('login'))
@@ -92,15 +94,15 @@ def location():
     state = g.user.state
     area = g.user.area
     district = g.user.district
-
+    soil_type=g.user.soil_type
     #predicting the crop using the district as input to weather api, which further gives weather input features to model,
     #and also using weather data to predict fertiliser
-    crops,fert=p.prediction_crop(model_crop=model_rf,model_fert=model_fert,district=district)
+    crops=p.prediction_crop(model_crop=model_rf,model_fert=model_fert,model_N=model_N,model_P=model_P,model_K=model_K,soil_type=soil_type,district=district)
     print(crops)
 
     #use the predicted fertiliser to query npk values
    
-    N,P,K=ff.get_fert_composition(fert,collection)
+    # N,P,K=ff.get_fert_composition(fert,collection)
 
     #predicting yield for each crop
     crop_yields=ff.pred_yield_helper(df,model_yield,crops=crops,area=area,state=state,district=district)
@@ -108,16 +110,16 @@ def location():
     #get current timestamp
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    for i in range(len(crops)):
+    for i in range(len(crop_yields)):
         #adding some random data to firebase db just to see if it is working
-        fbdata= {'timestamp':dt_string,'crop':crops[i],'yield':crop_yields[i],'N':N,'P':P,'K':K,'Fertiliser':fert}
+        fbdata= {'timestamp':dt_string,'crop':crop_yields[i][0],'yield':crop_yields[i][5],'N':crop_yields[i][1],'P':crop_yields[i][2],'K':crop_yields[i][3],'Fertiliser':crop_yields[i][4]}
         fdb.child("users").child(g.user.id).push(fbdata)
 
     #render template with predicted values (average yield, crop, NPK values, fertliser name)
-    return render_template("index.html",yields=crop_yields,crop=crops,fertiliser=fert,N=N,P=P,K=K)
+    return render_template("recommendation.html",yields=crop_yields)
     
 
-@app.route('/login', methods =['POST','GET']) 
+@app.route('/', methods =['POST','GET']) 
 def login(): 
     if request.method=='POST':
 
@@ -125,7 +127,6 @@ def login():
 
         # creates dictionary of form data 
         auth = request.form 
-    
         if not auth or not auth.get('phone') or not auth.get('password'): 
             # returns 401 if any phone or / and password is missing 
             return make_response( 
@@ -133,7 +134,7 @@ def login():
                 401, 
                 {'WWW-Authenticate' : 'Basic realm ="Login required !!"'} 
             ) 
-    
+        
         user = User.query.filter_by(phone = auth.get('phone')).first() 
     
         if not user: 
@@ -149,7 +150,7 @@ def login():
         # returns 403 if password is wrong 
         return redirect(url_for('login'))
 
-    return render_template("login.html")
+    return render_template("index.html")
    
 # signup route 
 @app.route('/signup', methods =['POST','GET']) 
@@ -185,11 +186,11 @@ def signup():
         else: 
             
             return redirect(url_for("login"))
-    return render_template("phone_verification.html")
+    return render_template("register.html")
 
 @app.route('/',methods=['POST','GET'])
 def startfunc():
-    return render_template("landing.html")
+    return render_template("index.html")
 
 
 
@@ -221,10 +222,13 @@ def past_rec():
         return redirect(url_for('login'))
     people = fdb.child("users").get()
     for person in people.each():
-        print(person.key())
         if(person.key()==str(g.user.id)):
-            recs=person.val()
-    return render_template("past_rec.html",recs=recs)
+            recs_json=person.val()
+
+    recs_list=[]
+    for key,value in recs_json.items():
+        recs_list.append(value)
+    return render_template("past_rec.html",recs=recs_list)
 
 @app.route('/view_crops',methods =['POST','GET'])
 def view_crops():

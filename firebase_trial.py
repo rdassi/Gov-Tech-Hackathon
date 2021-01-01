@@ -14,14 +14,14 @@ firebase =pyrebase.initialize_app(firebaseConfig)
 db=firebase.database()
 auth=firebase.auth()
 #AUTH
-email=input("Enter email")
+phno=input("Enter phno")
 password=input("Enter password")
 try:
-    auth.sign_in_with_email_and_password(email,password)
+    auth.sign_in_with_phno_and_password(phno,password)
     print("Successfully Signed in ") 
 except:
     print("Invalid Username or Password")
-key_email=email.replace('@', '').replace('.', '')
+key_phno=phno.replace('@', '').replace('.', '')
 data= {'name':"Neel", 'location':'Bangalore','area': '12345', 'crop': 'Maize'}
 db.child("users").child(key_email).push(data)
 

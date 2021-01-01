@@ -72,7 +72,9 @@ def get_seasons():
 def pred_yield_helper(df,model,crops,area,state,district):
     seasons=get_seasons()
     pred=[]
-    for crop in crops:
+    
+    for x in crops:
+        crop=x[0]
         #convert the crop to proper case for the yield prediction model
         cropnow=crop[0].upper()+crop[1:]
         print(cropnow)
@@ -84,8 +86,9 @@ def pred_yield_helper(df,model,crops,area,state,district):
             predictions.append(p.prediction_yield(model,df,area=area,season=season,crop=cropnow,state=state,district=district.upper()))
         
         print(predictions)
-        pred.append(sum(predictions)/len(predictions))
-    return pred
+        # pred.append(sum(predictions)/len(predictions))
+        x.append(sum(predictions)/len(predictions))
+    return crops
 
 
 def crop_fert_details(mdbcollection):

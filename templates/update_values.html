@@ -1,61 +1,45 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>My farm</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="../static/CSS/style.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-            crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-            crossorigin="anonymous">
-    </head>
-    <h1> Update Farm Details</h1>
-    <body>
-        <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{url_for('profile')}}">Profile <span class="sr-only">(current)</span></a>
-                    </li>
-    
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://icar.org.in/node/4059">Helpline</a>
-                    </li>
-    
-                    
-                </ul>
-            </div>
-        </nav>
+
+
+
+
+<h1> Update Farm Details</h1>
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+
+    <div class="container">
         <form method="POST">
-            <!-- <div>
-                <label for="authy-countries">Country code:</label>
-                <select name="country_code" id="authy-countries" data-show-as="number"></select>
-            </div> -->
-            <!-- <input type="text" name="name" placeholder="enter name" required>
-            <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="10 digit phone number" required> -->
-            <p class="label">Update Soil</p>
-            <select class="form-control" name="soil">
-                <option value="" disabled selected>Your current value is {{g.user.soil_type}}</option>
-                <option>Sandy</option>
-                <option>Loamy</option>
-                <option>Black</option>
-                <option>Red</option>
-                <option>Clayey</option>
-            </select><br><br>
-            <p class="label">Update Area</p>
-            <input type="text" name="area" placeholder="Your current area is {{g.user.area}}" />
+
+            
+
+           
+            <div class="area aligncenter">
+            <h3 class="label">Update Area</h3>
+            <input class="text-box-for-area" type="text" name="area" placeholder="Your current area is {{g.user.area}}, enter a new value to update" />
             <!-- <input type="password" name="password" placeholder="password" required> -->
+            </div>
+            <br>
+            <h3 class="label">Update Soil</h3>
+            <div class="search_categories">
+                <div class="select">
+                <select id="search_categories"  name="soil">
+                    <option value="" disabled selected>Your current value is {{g.user.soil_type}}, click to choose new type</option>
+                    <option>Sandy</option>
+                    <option>Loamy</option>
+                    <option>Black</option>
+                    <option>Red</option>
+                    <option>Clayey</option>
+                </select>
+                </div>
+            </div>
+            <br>
             <input type="submit" name="submit">
         </form>
-        
-    </body>
-</html>
+    </div>
+
+    
+{% endblock content %}

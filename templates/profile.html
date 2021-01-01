@@ -1,61 +1,72 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="../static/CSS/style.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-            crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-            crossorigin="anonymous">
 
-    </head>
-    <h1>Hello {{g.user.name}}</h1>
-    <body>
-        <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{url_for('profile')}}">Profile <span class="sr-only">(current)</span></a>
-                    </li>
-    
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://icar.org.in/node/4059">Helpline</a>
-                    </li>
-    
-                    
-                </ul>
+
+           
+{% block content %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">Welcome {{g.user.name}}!</h1>
+        <!-- <a href="#" class="btn btn-primary btn-lg">Call to action!</a> -->
+    </header>
+    <!-- <section class="page-section menu"> -->
+        <div class="row text-center">
+            <div class="col-md-6 col-lg-3 mb-5">
+                <a href="{{url_for('location')}}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="../static/images/recommend_card.jpeg" alt="Card image cap">
+                        <div class="info">
+                            <p>Get Recommendation</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </nav>
-        
-        <form action="/index">
-            <button>Get Recommendations</button>
-        </form>
-        <form action="/set_values">
-            <button>Update Farm Details</button>
-        </form>
-        <form action="/past_rec">
-            <button>See Past Recommendations</button>
-        </form>
-        <form action="/view_crops">
-            <button>Crops Details</button>
-        </form>
-        <form action="/view_ferts">
-            <button>Fertilizer Details</button>
-        </form>
-        <form action="/logout">
-            <button>Logout</button>
-        </form>
-        
-        
-    </body>
-</html>
+            <div class="col-md-6 col-lg-3 mb-5">
+                <a href="{{url_for('setuserparamsfunc')}}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="../static/images/update_farm_card.jpeg" alt="Card image cap">
+                        <div class="info">
+                            <p>Update Farm Details</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5">
+                <a href="{{url_for('past_rec')}}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="../static/images/past_rec_card.png" alt="Card image cap">
+                        <div class="info">
+                            <p>See Past Recommendations</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5">
+                <a href="{{url_for('view_crops')}}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="../static/images/crop_details_card.jpg" alt="Card image cap">
+                        <div class="info">
+                            <p>Crops Details</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5">
+                <a href="{{url_for('view_ferts')}}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="../static/images/fert_card.jpg" alt="Card image cap">
+                        <div class="info">
+                            <p>Fertilizer Details</p>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    <!-- </section> -->
+
+
+
+
+
+   
+{% endblock content %}

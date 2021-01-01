@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+
+
+           
+{% block content %}
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    
+    <div class="container">
+        <table class="styled-table">
+            <thead>
+            <tr class="active-row">
+                <th scope="col">Parameter</th>
+                
+                <th scope="col" colspan="3"> Crop Recommendation</th>
+                <!-- <th scope="col" colspan="3">Alternate crops</th> -->
+                <!-- <th scope="col">Handle</th> -->
+            </tr>
+            </thead>
+            <tbody>
+           
+            <tr class="active-row">
+                <th scope="row">Name of the crop</th>
+                <td>{{crop}}</td>
+                
+            </tr class="active-row">
+
+            
+
+            <tr class="active-row">
+                <th scope="row">Economic Yield</th>
+                <td><a href="{{url_for('view_crops')}}"></a>{{yields}}</td>
+                
+            </tr>
+            <tr class="active-row">
+                <th scope="row">Fertiliser name</th>
+                <td><a href="{{url_for('view_ferts')}}"></a>{{fertiliser}}</td>
+                
+            </tr>
+           
+
+            <tr class="active-row">
+                <th scope="row">N</th>
+                <td>{{N}}</td>
+                
+            </tr>
+            <tr class="active-row">
+                <th scope="row">P</th>
+                <td>{{P}}</td>
+                
+            </tr>
+            <tr class="active-row">
+                <th scope="row">K</th>
+                <td>{{K}}</td>
+                
+            </tr>
+            
+            
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}  
+   
